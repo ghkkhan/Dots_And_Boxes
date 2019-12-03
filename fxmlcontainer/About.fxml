@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" spacing="30.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hkg8bdotsandboxes.AboutController">
+   <children>
+      <Label styleClass="baseText" text="About">
+         <font>
+            <Font name="Times New Roman" size="82.0" />
+         </font>
+      </Label>
+      <Label styleClass="baseText" text="Author : Huzaifa Khan">
+         <font>
+            <Font name="Times New Roman" size="48.0" />
+         </font>
+      </Label>
+      <Label styleClass="baseText" text="App built for CS 3330 ">
+         <font>
+            <Font name="Times New Roman" size="48.0" />
+         </font>
+      </Label>
+      <Label styleClass="baseText" text="Built in November 2019">
+         <font>
+            <Font name="Times New Roman" size="48.0" />
+         </font>
+      </Label>
+      <Label styleClass="baseText" text="         The app is a digitization of the classic game of Dots and Boxes...    I was recently introduced to it and wanted to preserve it in today's ever more digital." wrapText="true">
+         <font>
+            <Font name="Times New Roman" size="48.0" />
+         </font>
+      </Label>
+      <HBox alignment="CENTER" spacing="50.0">
+         <children>
+            <Button mnemonicParsing="false" onAction="#backButtonClicked" text="Back">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Button>
+            <Button mnemonicParsing="false" onAction="#exitClicked" text="Exit">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Button>
+         </children>
+      </HBox>
+      <Label fx:id="label" />
+   </children>
+   <padding>
+      <Insets bottom="100.0" left="100.0" right="100.0" top="100.0" />
+   </padding>
+</VBox>
