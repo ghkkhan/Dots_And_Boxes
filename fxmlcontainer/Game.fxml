@@ -8,7 +8,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hkg8bdotsandboxes.GameController">
+<HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gamepackage.GameController">
    <children>
       <VBox alignment="CENTER" prefWidth="300.0" spacing="100.0" styleClass="scoreBoard">
          <children>
@@ -22,6 +22,11 @@
                   <Font size="96.0" />
                </font>
             </Label>
+            <Button fx:id="p1Surr" mnemonicParsing="false" onAction="#p1Surrenders" text="Surrender">
+               <font>
+                  <Font name="Niagara Engraved" size="41.0" />
+               </font>
+            </Button>
          </children>
       </VBox>
       <VBox prefWidth="1000.0">
@@ -41,6 +46,11 @@
                   <Font size="96.0" />
                </font>
             </Label>
+            <Button fx:id="p2Surr" mnemonicParsing="false" onAction="#p2Surrenders" text="Surrender">
+               <font>
+                  <Font name="Niagara Engraved" size="41.0" />
+               </font>
+            </Button>
          </children>
       </VBox>
    </children>

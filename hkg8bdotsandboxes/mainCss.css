@@ -14,10 +14,27 @@ and open the template in the editor.
 .button {
     -fx-text-fill: #CCCCCC;
     -fx-background-color: #111111;
+    -fx-border-color: #FFFFFF;
+
+}
+#p1Surr, #p2Surr {
+    -fx-text-fill:cyan;
+    -fx-underline:true;
+}
+#p2Surr {
+    -fx-text-fill: #FF4444;
+    -fx-underline:true;
 }
 .baseText {
     -fx-text-fill: #DDDDDD;
 }
 .scoreBoard {
+    -fx-background-color: #333333;
+}
+#textBox {
+    -fx-text-fill: #DDDDDD;
+}
+
+#textBox .content{
     -fx-background-color: #333333;
 }

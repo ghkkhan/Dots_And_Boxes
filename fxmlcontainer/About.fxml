@@ -8,11 +8,21 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" spacing="30.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hkg8bdotsandboxes.AboutController">
+<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" spacing="30.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AboutController">
    <children>
       <Label styleClass="baseText" text="About">
          <font>
             <Font name="Times New Roman" size="82.0" />
+         </font>
+      </Label>
+      <Label styleClass="baseText" text="This app was built in November of 2019, for CS3330">
+         <font>
+            <Font name="Times New Roman" size="48.0" />
+         </font>
+      </Label>
+      <Label styleClass="baseText" text="        The app is a digitization of the classic game of Dots and Boxes...    It seemed a good challenge so I implemented it with java" wrapText="true">
+         <font>
+            <Font name="Times New Roman" size="48.0" />
          </font>
       </Label>
       <Label styleClass="baseText" text="Author : Huzaifa Khan">
@@ -20,17 +30,12 @@
             <Font name="Times New Roman" size="48.0" />
          </font>
       </Label>
-      <Label styleClass="baseText" text="App built for CS 3330 ">
+      <Label styleClass="baseText" text="Email: hkg8b@mail.missouri.edu">
          <font>
             <Font name="Times New Roman" size="48.0" />
          </font>
       </Label>
-      <Label styleClass="baseText" text="Built in November 2019">
-         <font>
-            <Font name="Times New Roman" size="48.0" />
-         </font>
-      </Label>
-      <Label styleClass="baseText" text="         The app is a digitization of the classic game of Dots and Boxes...    I was recently introduced to it and wanted to preserve it in today's ever more digital." wrapText="true">
+      <Label styleClass="baseText" text="GitHub: ghkkhan">
          <font>
             <Font name="Times New Roman" size="48.0" />
          </font>
@@ -39,12 +44,12 @@
          <children>
             <Button mnemonicParsing="false" onAction="#backButtonClicked" text="Back">
                <font>
-                  <Font size="24.0" />
+                  <Font name="Times New Roman" size="24.0" />
                </font>
             </Button>
             <Button mnemonicParsing="false" onAction="#exitClicked" text="Exit">
                <font>
-                  <Font size="24.0" />
+                  <Font name="Times New Roman" size="24.0" />
                </font>
             </Button>
          </children>

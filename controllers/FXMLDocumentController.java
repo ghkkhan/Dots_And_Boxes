@@ -36,17 +36,10 @@ public class FXMLDocumentController extends SysCom implements Initializable {
         changeScene(ABOUT_FILE, (Stage) label.getScene().getWindow());
     }
     
-    /*
-    @FXML
-    private void helpButton() {
-        changeScene(HELP_FILE, (Stage) label.getScene().getWindow());
-    }
-    
     @FXML
     private void recordButton() {
         changeScene(RECORD_FILE, (Stage) label.getScene().getWindow());
-    }
-    */
+    }    
     
     @FXML
     private void exitButton() {
@@ -54,7 +47,7 @@ public class FXMLDocumentController extends SysCom implements Initializable {
     }
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void initialize(URL location, ResourceBundle rb) {
     
     }
 }

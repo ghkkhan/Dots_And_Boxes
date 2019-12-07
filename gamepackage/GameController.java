@@ -16,9 +16,17 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Optional;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
+import javafx.stage.Stage;
 
 
 /**
@@ -45,54 +53,26 @@ public class GameController extends SysCom implements Initializable, PropertyCha
     @FXML
     private Label p2Score;
     
+    @FXML
+    private Button p1Surr; 
+    @FXML
+    private Button p2Surr;
+    
+    
     private final String RED = "#EE4466";
+    private final String CYAN = "#00FFFF";
     private final String WHITE = "#DDDDDD";
     
     @Override
-    @FXML
     public void initialize(URL url, ResourceBundle rb) {
         
         // TODO
-                
         String name1 = "Player 1", name2 = "Player 2";
         //*****************************************
         //handle getting names from the user.
         
-        TextInputDialog textGetter = new TextInputDialog("");
-        textGetter.setHeaderText("Enter your name, player 1!");
-        Optional<String> res;
-        while(true) {
-            res = textGetter.showAndWait();
-            if(res.isPresent()) {
-                if(!textGetter.getEditor().getText().equals("")) {
-                    name1 = textGetter.getEditor().getText();
-                    break;
-                }
-            }
-            else {
-                //code to go back to the main menu...
-                exitApp();
-//                return;
-//                backToMain((Stage) p2Score.getScene().getWindow());
-            }
-        }
-        textGetter.getEditor().setText("");
-        textGetter.setHeaderText("Enter your name, player 2!");
-        while(true) {
-            res = textGetter.showAndWait();
-            if(res.isPresent()) {
-                if(!textGetter.getEditor().getText().equals("")) {
-                    name2 = textGetter.getEditor().getText();
-                    break;
-                }
-            }
-            else {
-                //code to go back to the main menu...
-                exitApp();
-//                return;
-//                backToMain((Stage) p2Score.getScene().getWindow());
-            }
-        }
+        name1 = nameGetterAlert(1);
+        name2 = nameGetterAlert(2);
         
         //at this point, names have been gotten. next is setting up the board.
         gc = gBoard.getGraphicsContext2D();
@@ -107,19 +87,96 @@ public class GameController extends SysCom implements Initializable, PropertyCha
             }
         });
 
+        gModel.player1Name = name1;
+        gModel.player2Name = name2;
         
         p1Name.setText(name1);
         p2Name.setText(name2);
         
-        p1Name.setStyle("-fx-text-fill:" + RED);
+        p1Name.setStyle("-fx-text-fill:" + CYAN);
         p2Name.setStyle("-fx-text-fill:" + WHITE);
-
+        p2Surr.setVisible(false);
+        //board setup complete. game ready to start.
     }
+    @FXML
+    private void p1Surrenders() {//player 1 has clicked their surrender button.
+        runSurrender(gModel.player1Name, gModel.player2Name);
+    }
+    @FXML
+    private void p2Surrenders() {//player 2 has clicked their surrender button.
+        runSurrender(gModel.player2Name, gModel.player1Name);
+    }
+    
+    private String nameGetterAlert(int i) {
+        TextInputDialog textGetter = new TextInputDialog("");
+        textGetter.setHeaderText("Enter your name, player "+i+"!\nNote: Clicking cancel will close the program.\nAlso, the name cannot be empty");
+        Optional<String> res;
+        while(true) {
+            res = textGetter.showAndWait();
+            if(res.isPresent()) {
+                if(!textGetter.getEditor().getText().equals("")) {
+                    return textGetter.getEditor().getText();
+                }
+            }
+            else exitApp();
+        }
+    }
+    
+    private void runSurrender(String s, String a) {
+        Alert al = new Alert(AlertType.CONFIRMATION);
+        al.setTitle("Surrender Prompt");
+        al.setHeaderText("Are you sure you'd like to surrender, " + s + "?");
+        al.setContentText("This will be counted as your loss.");
+        Optional<ButtonType> res;
+        res = al.showAndWait();
+        if(res.get() == ButtonType.OK) {
+            //commence the victory/surrender screen.This is the same thing that shows when a person actulaly wins the full match.
+            runCompletionSequence(a);
+        }
+        else {
+            return;
+        }
+    }
+    
+    private void runCompletionSequence(String s) {
+        Alert al = new Alert(AlertType.CONFIRMATION);
+        al.setTitle("Congratulations!!");
+        al.setHeaderText("Congratulations, player named " + s+"! You've won this round." );
+        al.setContentText("Would you like to save this match?\nBear in mind that you can only save up to 20 matches.\nAfter this point, the earliest matches are deleted after every match.");
+        Optional<ButtonType> res = al.showAndWait();
+        if(res.get() == ButtonType.OK) {
+            //save the match at the top of the file?....
+            pf("Need to implement saving of the match data.");
+            
+            try {
+                String str = gModel.player1Name + " vs. " + gModel.player2Name + " : "
+                        + gModel.getP1Score() + " to " + gModel.getP2Score() + " respectively : : the victor is " + s;
+                BufferedWriter writer = new BufferedWriter(new FileWriter("records.txt", true));
+                writer.append(str + "\n");
+                writer.close();
+            }
+            catch(IOException e) {
+                pf("There was an ioexception in the creating or reading of file.");
+            }
+        }
+        else {
+            al = new Alert(AlertType.INFORMATION);
+            al.setHeaderText("Alright, this match will be lost to the Annuls of History.");
+            al.setContentText("You might wanna snap a picture while you still can.");
+            al.setTitle("Match-Data-Purged");
+            al.showAndWait();
+        }
+        //change the view back to the main screen.
+//        pf("Change thte view back to the main SCreen");
+        backToMain((Stage) gBoard.getScene().getWindow());
+    }
+    
     private void resetCircleBlack(GameCircle c) {
         gc.setFill(Color.BLACK);
         gc.fillOval(c.x, c.y, c.radius, c.radius);
         gModel.emptyList();
     }
+    
     private void resetCircleBlue(GameCircle c){
         gc.setFill(Color.BLUE);
         gc.fillOval(c.x, c.y, c.radius, c.radius);
@@ -143,7 +200,6 @@ public class GameController extends SysCom implements Initializable, PropertyCha
         p1Score.setText("" + left);
         p2Score.setText("" + right);
     }
-    
     private void setBoard() {
         gc.setFill(Color.BLACK);
         int x, y, radius = 20;
@@ -164,7 +220,6 @@ public class GameController extends SysCom implements Initializable, PropertyCha
         gc.setStroke(Color.WHITE);
         gc.strokeRect(0, 0, 1000, 900);
     }
-    
     private void colorSquare(GameSquare A, boolean turn) {
         if(turn) gc.setFill(Color.CYAN);
         else gc.setFill(Color.CRIMSON);
@@ -174,6 +229,7 @@ public class GameController extends SysCom implements Initializable, PropertyCha
         resetCircleBlue(A.dLeft);
         resetCircleBlue(A.dRight);
     }
+    
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if(((String)evt.getPropertyName()).equals("Make Line")) {
@@ -193,13 +249,20 @@ public class GameController extends SysCom implements Initializable, PropertyCha
         }
         if(evt.getPropertyName().equals("PlayerSwitch")) {
             if((boolean)evt.getNewValue()) {
-                p1Name.setStyle("-fx-text-fill:" + RED);
+                p1Name.setStyle("-fx-text-fill:" + CYAN);
                 p2Name.setStyle("-fx-text-fill:" + WHITE);
+                p1Surr.setVisible(true);
+                p2Surr.setVisible(false);
             }
             else {
                 p1Name.setStyle("-fx-text-fill:" + WHITE);
                 p2Name.setStyle("-fx-text-fill:" + RED);
+                p1Surr.setVisible(false);
+                p2Surr.setVisible(true);
             }
+        }
+        if(evt.getPropertyName().equals("gameEnd")) {
+            runCompletionSequence((String)evt.getNewValue());
         }
     }
 }

@@ -16,8 +16,11 @@ import java.util.ArrayList;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
-public class GameModel extends AbstractModel{
+public class GameModel extends AbstractModel implements GameInterface{
     private final int num = 9;
+    
+    String player1Name;
+    String player2Name;
     
     private ArrayList<GameCircle> circleArray = new ArrayList<>();//keeps track of all the circles... to be moved to Model
     private ArrayList<GameCircle> circlesOutOfPlay = new ArrayList<>();//keeps track of circles that are done...
@@ -31,7 +34,9 @@ public class GameModel extends AbstractModel{
     private int player1Score=0;
     private int player2Score=0;
     
-    int checkBoxes(GameCircle c, GameCircle e, GameSquare A) {
+    private int total = 0;//once this reaches 81, the game is over, bro.
+    
+    public int checkBoxes(GameCircle c, GameCircle e, GameSquare A) {
         if(A.makeLine(c, e)) {
             if(A.checkForFilledResponse()) {
                 //this means that the square has all the sides filled.. Its filled.
@@ -39,7 +44,17 @@ public class GameModel extends AbstractModel{
                 firePropertyChange("colorSquare", A, player1Turn);
                 if(player1Turn) player1Score++;
                 else player2Score++;
+                total++;
                 firePropertyChange("score", player1Score, player2Score);
+                if(total == 81) {
+                    //commence the ending of the game... crown the victor and bury the lost.
+                    if(player2Score > player1Score) {
+                        firePropertyChange("gameEnd", null, player2Name);
+                    }
+                    else {
+                        firePropertyChange("gameEnd", null, player1Name);
+                    }
+                }
                 return 1;
             }
             return 0;
@@ -47,9 +62,8 @@ public class GameModel extends AbstractModel{
         else return -255;
     }
     
-    void secondCircle(GameCircle c, double x, double y, GameSquare A, GameSquare B) {
+    public void secondCircle(GameCircle c, double x, double y, GameSquare A, GameSquare B) {
         GameCircle e = circlesInPlay[0];
-
         if(distForm(e.x, e.y, c.x, c.y) <= 85) {
             circlesInPlay[1] = c;
             firstCircle = true;
@@ -66,13 +80,7 @@ public class GameModel extends AbstractModel{
             }
             else if(test < -10) {
                 //warn players that they can't make the same line twice.
-                pf("Can't draw the same line Twice! Here, try again.");
-                
-                Alert al = new Alert(AlertType.ERROR);
-                al.setTitle("Illegal MOVE!");
-                al.setHeaderText("That move just now was Illegal.");
-                al.setContentText("You know the rules! I believe in you! Try again...");
-                
+                illegalMoveAlertBoxTemplate("You can't draw the same line twice!!");
                 firstCircle = true;
                 if(circlesOutOfPlay.contains(c))    firePropertyChange("Paint it Blue", null, null);
                 else                                firePropertyChange("Paint it Black", null, null);
@@ -83,9 +91,19 @@ public class GameModel extends AbstractModel{
 //            warn player that they can only click the first
 //            circle or an adjacent, non-diagonal circle.
 //            Alert box or somehing.
+            illegalMoveAlertBoxTemplate("You gotta click on the same circle or an adjacent, non-diagonal circle!!");
         }
     }
-    GameCircle checkClickCircle(double x, double y) { 
+    
+    public void illegalMoveAlertBoxTemplate(String s) {
+        Alert al = new Alert(AlertType.ERROR);
+        al.setTitle("Illegal MOVE");
+        al.setHeaderText("That move just now was Illegal, ya know!?");
+        al.setContentText("Try again! I believe in you!!!\n" + s);
+        al.showAndWait();
+    }
+    
+    public GameCircle checkClickCircle(double x, double y) { 
         GameCircle clickedCircle = null;
         for(GameCircle c : circleArray) {
             if(c.checkClick(x, y) == true) {
@@ -182,10 +200,9 @@ public class GameModel extends AbstractModel{
         return null;
     }
     
-    int checkOrient(GameCircle B) {
+    public int checkOrient(GameCircle B) {
         int ans = -1;
         GameCircle A = circlesInPlay[0];
-        
         if(A.x == B.x) {
             if(A.y == B.y) {
                 ans = 0;
@@ -209,9 +226,15 @@ public class GameModel extends AbstractModel{
     }
     
     
+    public int getP1Score() {
+        return player1Score;
+    }
+    public int getP2Score() {
+        return player2Score;
+    }
 //  *****************************************************************************************************
     //initialize functions. Used to set up the board and the data storage behind it.
-    void makeSquares() {
+    public void makeSquares() {
         for(int i = 0; i < num; i++) {
             for(int j = 0; j < num; j++) {
                 squArray[i][j] = new GameSquare(circleArray.get(j+i*10), circleArray.get(j + i*10 + 1),
@@ -219,18 +242,18 @@ public class GameModel extends AbstractModel{
             }
         }
     }
-    ArrayList<GameCircle> getCircleArray() {
+    public ArrayList<GameCircle> getCircleArray() {
         return circleArray;
     }
-    void emptyList() {
+    public void emptyList() {
         circlesInPlay[0] = null;
         circlesInPlay[1] = null;
     }
     
-    void addToList(GameCircle c) {
+    public void addToList(GameCircle c) {
         circleArray.add(c);
     }
-    double distForm(double x1, double y1, double x2, double y2) {
+    public double distForm(double x1, double y1, double x2, double y2) {
         double ans;
         ans = Math.pow(x1-x2, 2) + Math.pow(y1-y2,2);
         ans = Math.sqrt(ans);

@@ -12,7 +12,6 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 /**
@@ -38,7 +37,7 @@ public abstract class SysCom {
         try {
             root = FXMLLoader.load(getClass().getResource(s));
             sc = new Scene(root);
-            sc.getStylesheets().add(getClass().getResource("mainCss.css").toExternalForm());
+            sc.getStylesheets().add(getClass().getResource("/hkg8bdotsandboxes/mainCss.css").toExternalForm());
             stage.setScene(sc);
         } catch (IOException ex) {
             Logger.getLogger(SysCom.class.getName()).log(Level.SEVERE, null, ex);
